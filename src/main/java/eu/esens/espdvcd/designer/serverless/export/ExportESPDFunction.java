@@ -63,13 +63,13 @@ public class ExportESPDFunction {
 
     EDMVersion version;
     try {
-      version = EDMVersion.valueOf(versionParam);
+      version = EDMVersion.valueOf(versionParam.toUpperCase());
     } catch (IllegalArgumentException e) {
       return request
           .createResponseBuilder(HttpStatus.BAD_REQUEST)
           .body(
               Errors.standardError(
-                  400, String.format("Version %s is not supported.", exportTypeParam)))
+                  400, String.format("Version %s is not supported.", versionParam)))
           .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
           .build();
     }
@@ -121,8 +121,8 @@ public class ExportESPDFunction {
 
     if (request
         .getHeaders()
-        .get(HttpHeaders.CONTENT_TYPE)
-        .equals(ContentType.APPLICATION_JSON.getMimeType())) {
+        .get(HttpHeaders.CONTENT_TYPE.toLowerCase())
+        .contains(ContentType.APPLICATION_JSON.getMimeType())) {
       if (AppConfig.getInstance().isArtefactDumpingEnabled()) {
         try {
           Files.createDirectories(
@@ -156,6 +156,7 @@ public class ExportESPDFunction {
           document = APIUtils.getJacksonMapper(version).readValue(request.getBody().get(), ESPDResponseImpl.class);
           streamToReturn = service.exportESPDResponseAs(document, languageCode, exportType);
         } else {
+
           return request
                   .createResponseBuilder(HttpStatus.BAD_REQUEST)
                   .body(Errors.standardError(400, "Document type (request or response) must be specified."))
@@ -164,7 +165,7 @@ public class ExportESPDFunction {
         }
         return request
                 .createResponseBuilder(HttpStatus.OK)
-                .body(streamToReturn)
+                .body(streamToReturn.readAllBytes())
                 .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_OCTET_STREAM.getMimeType())
                 .header(
                         "Content-Disposition",

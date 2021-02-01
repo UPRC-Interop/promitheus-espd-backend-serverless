@@ -1,12 +1,14 @@
 package eu.esens.espdvcd.designer.serverless.criteria;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.BindingName;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
-import eu.esens.espdvcd.designer.service.NationalCriteriaEvidenceService;
+import eu.esens.espdvcd.designer.service.NationalCriteriaMappingService;
 import eu.esens.espdvcd.designer.util.Errors;
+import eu.esens.espdvcd.designer.util.JsonUtil;
 import eu.esens.espdvcd.retriever.exception.RetrieverException;
 import org.apache.http.HttpHeaders;
 import org.apache.http.entity.ContentType;
@@ -37,12 +39,12 @@ public class TranslatedECertisCriteriaInfoFunction {
       @BindingName("lang") String lang,
       final ExecutionContext context) {
 
-    NationalCriteriaEvidenceService criteriaEvidenceService =
-        NationalCriteriaEvidenceService.INSTANCE;
+    NationalCriteriaMappingService criteriaEvidenceService =
+            NationalCriteriaMappingService.INSTANCE;
     try {
       return request
           .createResponseBuilder(HttpStatus.OK)
-          .body(criteriaEvidenceService.getTranslatedEvidence(criterionID, countryCode, lang))
+          .body(JsonUtil.toJson(criteriaEvidenceService.getTranslatedNationalCriteria(criterionID, countryCode, lang)))
           .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
           .build();
     } catch (RetrieverException e) {
@@ -53,10 +55,16 @@ public class TranslatedECertisCriteriaInfoFunction {
           .build();
     } catch (IllegalArgumentException e) {
       return request
-          .createResponseBuilder(HttpStatus.NOT_ACCEPTABLE)
-          .body(Errors.notAcceptableError("Language or country code does not exist."))
-          .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
-          .build();
+              .createResponseBuilder(HttpStatus.NOT_ACCEPTABLE)
+              .body(Errors.notAcceptableError("Language or country code does not exist."))
+              .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
+              .build();
+    } catch (JsonProcessingException e) {
+      return request
+              .createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(Errors.standardError(500, e.getMessage()))
+              .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
+              .build();
     }
   }
 }

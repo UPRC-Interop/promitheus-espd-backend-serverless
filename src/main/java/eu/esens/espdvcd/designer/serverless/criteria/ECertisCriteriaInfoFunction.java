@@ -1,12 +1,14 @@
 package eu.esens.espdvcd.designer.serverless.criteria;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.BindingName;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
-import eu.esens.espdvcd.designer.service.NationalCriteriaEvidenceService;
+import eu.esens.espdvcd.designer.service.NationalCriteriaMappingService;
 import eu.esens.espdvcd.designer.util.Errors;
+import eu.esens.espdvcd.designer.util.JsonUtil;
 import eu.esens.espdvcd.retriever.exception.RetrieverException;
 import org.apache.http.HttpHeaders;
 import org.apache.http.entity.ContentType;
@@ -34,12 +36,12 @@ public class ECertisCriteriaInfoFunction {
       @BindingName("criterionID") String criterionID,
       @BindingName("countryCode") String countryCode,
       final ExecutionContext context) {
-    NationalCriteriaEvidenceService criteriaEvidenceService =
-        NationalCriteriaEvidenceService.INSTANCE;
+    NationalCriteriaMappingService criteriaEvidenceService =
+            NationalCriteriaMappingService.INSTANCE;
     try {
       return request
           .createResponseBuilder(HttpStatus.OK)
-          .body(criteriaEvidenceService.getDefaultEvidence(criterionID, countryCode))
+          .body(JsonUtil.toJson(criteriaEvidenceService.getNationalCriteria(criterionID, countryCode)))
           .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
           .build();
     } catch (RetrieverException e) {
@@ -54,6 +56,12 @@ public class ECertisCriteriaInfoFunction {
           .body(Errors.notAcceptableError("Country code does not exist."))
           .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
           .build();
+    } catch (JsonProcessingException e) {
+      return request
+              .createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(Errors.standardError(500, e.getMessage()))
+              .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
+              .build();
     }
   }
 }

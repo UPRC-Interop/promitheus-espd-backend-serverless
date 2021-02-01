@@ -76,7 +76,7 @@ public class FilteredCriteriaFunction {
           .build();
     } catch (RetrieverException e) {
       return request
-          .createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+          .createResponseBuilder(HttpStatus.BAD_GATEWAY)
           .body(Errors.retrieverError(e.getMessage()))
           .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
           .build();
@@ -86,8 +86,11 @@ public class FilteredCriteriaFunction {
           .body(Errors.criteriaNotFoundError())
           .build();
     } catch (JsonProcessingException e) {
-      e.printStackTrace();
-      return null;
+      return request
+              .createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(Errors.standardError(500, e.getMessage()))
+              .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
+              .build();
     }
   }
 }

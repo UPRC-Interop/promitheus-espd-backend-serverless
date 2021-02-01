@@ -1,5 +1,6 @@
 package eu.esens.espdvcd.designer.serverless.criteria;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.BindingName;
@@ -10,6 +11,7 @@ import eu.esens.espdvcd.designer.service.CriteriaService;
 import eu.esens.espdvcd.designer.service.RegulatedCriteriaService;
 import eu.esens.espdvcd.designer.service.SelfContainedCriteriaService;
 import eu.esens.espdvcd.designer.util.Errors;
+import eu.esens.espdvcd.designer.util.JsonUtil;
 import eu.esens.espdvcd.retriever.exception.RetrieverException;
 import org.apache.http.HttpHeaders;
 import org.apache.http.entity.ContentType;
@@ -66,7 +68,7 @@ public class CriteriaFunction {
     try {
       return request
           .createResponseBuilder(HttpStatus.OK)
-          .body(criteriaService.getCriteria(contractingOperatorEnum))
+          .body(JsonUtil.toJson(criteriaService.getCriteria(contractingOperatorEnum)))
           .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
           .build();
     } catch (RetrieverException e) {
@@ -75,6 +77,12 @@ public class CriteriaFunction {
           .body(Errors.retrieverError(e.getMessage()))
           .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
           .build();
+    } catch (JsonProcessingException e) {
+      return request
+              .createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+              .body(Errors.standardError(500, e.getMessage()))
+              .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
+              .build();
     }
   }
 }
