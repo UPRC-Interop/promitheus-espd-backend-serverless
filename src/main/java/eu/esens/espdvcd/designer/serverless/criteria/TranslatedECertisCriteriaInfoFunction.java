@@ -6,7 +6,7 @@ import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.BindingName;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
-import eu.esens.espdvcd.designer.service.NationalCriteriaMappingService;
+import eu.esens.espdvcd.designer.service.NationalCriteriaEvidenceService;
 import eu.esens.espdvcd.designer.util.Errors;
 import eu.esens.espdvcd.designer.util.JsonUtil;
 import eu.esens.espdvcd.retriever.exception.RetrieverException;
@@ -39,12 +39,12 @@ public class TranslatedECertisCriteriaInfoFunction {
       @BindingName("lang") String lang,
       final ExecutionContext context) {
 
-    NationalCriteriaMappingService criteriaEvidenceService =
-            NationalCriteriaMappingService.INSTANCE;
+    NationalCriteriaEvidenceService criteriaEvidenceService =
+            NationalCriteriaEvidenceService.INSTANCE;
     try {
       return request
           .createResponseBuilder(HttpStatus.OK)
-          .body(JsonUtil.toJson(criteriaEvidenceService.getTranslatedNationalCriteria(criterionID, countryCode, lang)))
+          .body(JsonUtil.toJson(criteriaEvidenceService.getTranslatedEvidence(criterionID, countryCode, lang)))
           .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
           .build();
     } catch (RetrieverException e) {
