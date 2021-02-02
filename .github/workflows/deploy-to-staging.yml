@@ -19,7 +19,7 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Setup Java Sdk ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v1
@@ -27,21 +27,20 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: "Run install of deps"
-        shell: pwsh
+        shell: bash
         run: |
           git clone --branch gsccp-develop http://stash.ds.unipi.gr/scm/espd/espd-vcd-system.git 
           cd espd-vcd-system
-          gradlew.bat install
+          ./gradlew install
 
       - name: 'Checkout Master'
         uses: actions/checkout@master
 
       - name: 'Restore Project Dependencies Using Gradle'
-        shell: pwsh
+        shell: bash
         run: |
-          pushd './${{ env.POM_XML_DIRECTORY }}'
-          gradlew.bat clean azureFunctionsPackage
-          popd
+          ./gradlew clean azureFunctionsPackage
+          
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
