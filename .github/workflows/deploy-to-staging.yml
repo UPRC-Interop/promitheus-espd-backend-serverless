@@ -29,8 +29,10 @@ jobs:
       - name: 'Get espd-vcd-system dependency'
         uses: actions/checkout@v2
         with:
-          repository: "http://stash.ds.unipi.gr/projects/ESPD/repos/espd-vcd-system/browse?at=refs%2Fheads%2Fgsccp-develop"
+          repository: "http://stash.ds.unipi.gr/scm/espd/espd-vcd-system.git"
           path: "gsccp-develop"
+
+      - name: "Run install of deps"
         shell: pwsh
         run: |
           gradlew.bat install
