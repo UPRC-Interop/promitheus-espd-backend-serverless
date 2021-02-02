@@ -35,6 +35,8 @@ jobs:
       - name: "Run install of deps"
         shell: pwsh
         run: |
+          git clone --branch gsccp-develop http://stash.ds.unipi.gr/scm/espd/espd-vcd-system.git 
+          cd espd-vcd-system
           gradlew.bat install
 
       - name: 'Checkout Master'
