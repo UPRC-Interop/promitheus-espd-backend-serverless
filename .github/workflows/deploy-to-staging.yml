@@ -14,7 +14,7 @@ on:
 env:
   AZURE_FUNCTIONAPP_NAME: espd-designer-backend-win(stage)   # set this to your function app name on Azure
   POM_XML_DIRECTORY: '.'                     # set this to the directory which contains pom.xml file
-  POM_FUNCTIONAPP_NAME: your-app-name        # set this to the function app name in your local development environment
+  POM_FUNCTIONAPP_NAME: espd-designer-backend-win(stage)        # set this to the function app name in your local development environment
   JAVA_VERSION: '11'                      # set this to the dotnet version to use
 
 jobs:
