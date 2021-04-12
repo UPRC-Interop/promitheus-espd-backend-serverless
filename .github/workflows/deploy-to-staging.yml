@@ -2,8 +2,14 @@
 name: Deploy Java project to Azure Function App
 
 on:
-  [push]
-
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'  
 # CONFIGURATION
 # For help, go to https://github.com/Azure/Actions
 #
