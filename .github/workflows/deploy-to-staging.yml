@@ -4,15 +4,37 @@
 name: Build and deploy Java project to Azure Function App - promitheus-espd(stage)
 
 on:
+<<<<<<< HEAD
   push:
     branches:
       - master
   workflow_dispatch:
 
+=======
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'  
+# CONFIGURATION
+# For help, go to https://github.com/Azure/Actions
+#
+# 1. Set up the following secrets in your repository:
+#   AZURE_FUNCTIONAPP_PUBLISH_PROFILE
+#
+# 2. Change these variables for your configuration:
+>>>>>>> 4830e4127579152b2a6e985ef5567e780cc1b8b4
 env:
   AZURE_FUNCTIONAPP_NAME: promitheus-espd(stage)   # set this to your function app name on Azure
   POM_XML_DIRECTORY: '.'                     # set this to the directory which contains pom.xml file
+<<<<<<< HEAD
   POM_FUNCTIONAPP_NAME: promitheus-espd(stage)      # set this to the function app name in your local development environment
+=======
+  POM_FUNCTIONAPP_NAME: espd-designer-backend-win(stage)        # set this to the function app name in your local development environment
+>>>>>>> 4830e4127579152b2a6e985ef5567e780cc1b8b4
   JAVA_VERSION: '11'                      # set this to the dotnet version to use
 
 jobs:
