@@ -35,7 +35,7 @@ jobs:
       - name: "Run install of deps"
         shell: bash
         run: |
-          git clone --branch gsccp-develop http://stash.ds.unipi.gr/scm/espd/espd-vcd-system.git 
+          git clone -c http.sslverify=false --branch gsccp-develop http://stash.ds.unipi.gr/scm/espd/espd-vcd-system.git 
           cd espd-vcd-system
           ./gradlew install
 
