@@ -40,7 +40,7 @@ jobs:
         run: |
           git clone -c http.sslverify=false --branch gsccp-develop https://stash.ds.unipi.gr/scm/espd/espd-vcd-system.git 
           cd espd-vcd-system
-          ./gradlew install
+          ./gradlew publishToMavenLocal
 
       - name: 'Checkout Master'
         uses: actions/checkout@master
