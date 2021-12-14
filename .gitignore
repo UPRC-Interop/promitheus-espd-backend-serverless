@@ -1,6 +1,7 @@
 # Build output
 target/
 *.class
+
 # Log file
 *.log
 
