@@ -2,7 +2,6 @@
 target/
 *.class
 
-
 # Log file
 *.log
 
