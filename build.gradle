@@ -15,7 +15,6 @@ dependencies {
     implementation 'eu.espdint.espdvcd:designer-backend:2.1.0'
     // https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
     implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
-
     testCompile 'org.mockito:mockito-core:2.23.4'
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.4.2'
 }
@@ -31,7 +30,7 @@ repositories {
 azurefunctions {
      subscription = 'b7a0c8fc-17ad-4ddb-a44a-ebf5d2c26fe4'
     resourceGroup = 'min01-rg03'
-    appName = 'promitheus-espd(stage)' // please rename the function name
+    appName = 'promitheus-espd' // please rename the function name
     pricingTier = 'Consumption'
     // refers https://github.com/microsoft/azure-maven-plugins/tree/develop/azure-functions-maven-plugin#supported-pricing-tiers for all valid values
     region = 'westeu'

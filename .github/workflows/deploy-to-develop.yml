@@ -1,13 +1,16 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Staging - Build and deploy Java project to Azure Function App
+name: Production - Build and deploy Java project to Azure Function App
 
 on:
+  push:
+    branches:
+      - develop
   workflow_dispatch:
     inputs:
       logLevel:
-        description: 'Log level'
+        description: 'Log level'     
         required: true
         default: 'warning'
 # CONFIGURATION
@@ -18,9 +21,9 @@ on:
 #
 # 2. Change these variables for your configuration:
 env:
-  AZURE_FUNCTIONAPP_NAME: promitheus-espd(stage)   # set this to your function app name on Azure
+  AZURE_FUNCTIONAPP_NAME: promitheus-espd   # set this to your function app name on Azure
   POM_XML_DIRECTORY: '.'                     # set this to the directory which contains pom.xml file
-  POM_FUNCTIONAPP_NAME: promitheus-espd(stage)      # set this to the function app name in your local development environment
+  POM_FUNCTIONAPP_NAME: promitheus-espd      # set this to the function app name in your local development environment
   JAVA_VERSION: '11'                      # set this to the dotnet version to use
 
 jobs:
@@ -35,9 +38,9 @@ jobs:
       - name: "Run install of deps"
         shell: bash
         run: |
-          git clone -c http.sslverify=false --branch gsccp https://stash.ds.unipi.gr/scm/espd/espd-vcd-system.git 
+          git clone -c http.sslverify=false --branch gsccp-develop https://stash.ds.unipi.gr/scm/espd/espd-vcd-system.git 
           cd espd-vcd-system
-          ./gradlew install
+          ./gradlew publishToMavenLocal
 
       - name: 'Checkout Master'
         uses: actions/checkout@master
@@ -46,7 +49,7 @@ jobs:
         shell: bash
         run: |
           ./gradlew clean azureFunctionsPackage
-
+          
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
@@ -54,4 +57,4 @@ jobs:
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
           package: './${{ env.POM_XML_DIRECTORY }}/build/azure-functions/${{ env.POM_FUNCTIONAPP_NAME }}'
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE_DEV }}
