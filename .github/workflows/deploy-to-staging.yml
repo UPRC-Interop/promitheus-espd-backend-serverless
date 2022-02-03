@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       logLevel:
-        description: 'Log level'     
+        description: 'Log level'
         required: true
         default: 'warning'
 # CONFIGURATION
@@ -35,7 +35,7 @@ jobs:
       - name: "Run install of deps"
         shell: bash
         run: |
-          git clone -c http.sslverify=false --branch gsccp-develop http://stash.ds.unipi.gr/scm/espd/espd-vcd-system.git 
+          git clone -c http.sslverify=false --branch gsccp https://stash.ds.unipi.gr/scm/espd/espd-vcd-system.git 
           cd espd-vcd-system
           ./gradlew install
 
@@ -46,7 +46,7 @@ jobs:
         shell: bash
         run: |
           ./gradlew clean azureFunctionsPackage
-          
+
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
