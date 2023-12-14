@@ -28,9 +28,9 @@ repositories {
 }
 
 azurefunctions {
-     subscription = 'b7a0c8fc-17ad-4ddb-a44a-ebf5d2c26fe4'
+    subscription = 'b7a0c8fc-17ad-4ddb-a44a-ebf5d2c26fe4'
     resourceGroup = 'min01-rg03'
-    appName = 'promitheus-espd-develop' // please rename the function name
+    appName = 'promitheus-espd(stage)' // please rename the function name
     pricingTier = 'Consumption'
     // refers https://github.com/microsoft/azure-maven-plugins/tree/develop/azure-functions-maven-plugin#supported-pricing-tiers for all valid values
     region = 'westeu'
