@@ -16,7 +16,6 @@ import eu.esens.espdvcd.retriever.exception.RetrieverException;
 import org.apache.http.HttpHeaders;
 import org.apache.http.entity.ContentType;
 
-import java.util.Locale;
 import java.util.Optional;
 
 /** Azure Functions with HTTP Trigger. */
