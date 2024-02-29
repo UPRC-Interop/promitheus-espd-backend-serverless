@@ -38,7 +38,7 @@ jobs:
       - name: "Run install of deps"
         shell: bash
         run: |
-          git clone -c http.sslverify=false --branch gsccp-testing https://github.com/UPRC-Interop/espd-vcd-system.git
+          git clone -c http.sslverify=false --branch gsccp-copy https://github.com/UPRC-Interop/espd-vcd-system.git
           cd espd-vcd-system
           ./gradlew publishToMavenLocal -x test
 
