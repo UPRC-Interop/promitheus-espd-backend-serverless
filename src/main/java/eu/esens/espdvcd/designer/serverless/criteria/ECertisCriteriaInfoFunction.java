@@ -6,7 +6,7 @@ import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.BindingName;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
-import eu.esens.espdvcd.designer.service.NationalCriteriaMappingService;
+import eu.esens.espdvcd.designer.service.NationalCriteriaEvidenceService;
 import eu.esens.espdvcd.designer.util.Errors;
 import eu.esens.espdvcd.designer.util.JsonUtil;
 import eu.esens.espdvcd.retriever.exception.RetrieverException;
@@ -36,12 +36,12 @@ public class ECertisCriteriaInfoFunction {
       @BindingName("criterionID") String criterionID,
       @BindingName("countryCode") String countryCode,
       final ExecutionContext context) {
-    NationalCriteriaMappingService criteriaEvidenceService =
-            NationalCriteriaMappingService.INSTANCE;
+    NationalCriteriaEvidenceService criteriaEvidenceService =
+            NationalCriteriaEvidenceService.INSTANCE;
     try {
       return request
           .createResponseBuilder(HttpStatus.OK)
-          .body(JsonUtil.toJson(criteriaEvidenceService.getNationalCriteria(criterionID, countryCode)))
+          .body(JsonUtil.toJson(criteriaEvidenceService.getDefaultEvidence(criterionID, countryCode)))
           .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
           .build();
     } catch (RetrieverException e) {
