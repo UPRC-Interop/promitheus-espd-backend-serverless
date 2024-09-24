@@ -14,6 +14,7 @@ import eu.esens.espdvcd.designer.service.ImportESPDService;
 import eu.esens.espdvcd.designer.util.Errors;
 import eu.esens.espdvcd.designer.util.JsonUtil;
 import eu.esens.espdvcd.retriever.exception.RetrieverException;
+import eu.esens.espdvcd.codelist.enums.internal.ContractingOperatorEnum;
 import org.apache.commons.fileupload.MultipartStream;
 import org.apache.http.HttpHeaders;
 import org.apache.http.entity.ContentType;
