@@ -75,6 +75,16 @@ public class ImportESPDFunction {
           .body(Errors.standardError(400, "Request body must not be empty."))
           .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
           .build();
+
+    // Parse query parameter
+    String contractingOperator = request.getQueryParameters().get("contractingOperator");
+    ContractingOperatorEnum contractingOperatorEnum;
+    try {
+      contractingOperatorEnum = ContractingOperatorEnum.valueOf(contractingOperator);
+    } catch (IllegalArgumentException | NullPointerException e) {
+      contractingOperatorEnum = ContractingOperatorEnum.CONTRACTING_ENTITY;
+    }
+
     if (request
         .getHeaders()
         .get(HttpHeaders.CONTENT_TYPE.toLowerCase())
@@ -110,7 +120,7 @@ public class ImportESPDFunction {
           try {
             return request
                 .createResponseBuilder(HttpStatus.OK)
-                .body(JsonUtil.toJson(service.importESPDFile(tempFile)))
+                .body(JsonUtil.toJson(service.importESPDFile(tempFile, contractingOperatorEnum)))
                 .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
                 .build();
           } catch (RetrieverException
@@ -161,7 +171,7 @@ public class ImportESPDFunction {
 
         return request
             .createResponseBuilder(HttpStatus.OK)
-            .body(JsonUtil.toJson(service.importESPDFile(espdFile)))
+            .body(JsonUtil.toJson(service.importESPDFile(espdFile, contractingOperatorEnum)))
             .header(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType())
             .build();
       } catch (IllegalStateException
