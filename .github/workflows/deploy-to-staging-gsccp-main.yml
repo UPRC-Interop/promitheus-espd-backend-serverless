@@ -18,9 +18,9 @@ on:
 #
 # 2. Change these variables for your configuration:
 env:
-  AZURE_FUNCTIONAPP_NAME: promitheus-espd   # set this to your function app name on Azure
+  AZURE_FUNCTIONAPP_NAME: promitheus-espd(stage)   # set this to your function app name on Azure
   POM_XML_DIRECTORY: '.'                     # set this to the directory which contains pom.xml file
-  POM_FUNCTIONAPP_NAME: promitheus-espd      # set this to the function app name in your local development environment
+  POM_FUNCTIONAPP_NAME: promitheus-espd(stage)      # set this to the function app name in your local development environment
   JAVA_VERSION: '11'                      # set this to the dotnet version to use
 
 jobs:
